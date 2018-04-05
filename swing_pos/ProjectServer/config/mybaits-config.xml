@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC  "-//mybatis.org//DTD Config 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-config.dtd">  
+
+<!-- 加载资源文件 --> 
+<configuration>  
+     <mappers>  
+         <mapper resource="com/pos/dao/impl/UserDao.xml"/>
+         
+         <mapper resource="com/pos/dao/impl/DepartDao.xml"/>
+          
+         <mapper resource="com/pos/dao/impl/EmployeeDao.xml"/>
+         
+         <mapper resource="com/pos/dao/impl/CustomerDao.xml"/>
+         
+         <mapper resource="com/pos/dao/impl/CargoDao.xml"/>
+         
+         <mapper resource="com/pos/dao/impl/WareDao.xml"/>  
+          
+         <mapper resource="com/pos/dao/impl/Inventory.xml"/>
+         
+         <mapper resource="com/pos/dao/impl/SaleDao.xml"/>
+         
+         <mapper resource="com/pos/dao/impl/PurchaseDao.xml"/>
+           
+     </mappers>  
+</configuration>  

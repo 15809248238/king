@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+ 
+ <mapper namespace="com.pos.dao.EmployeeDao"> 
+ 
+ 	<select id="findAll"  resultType="com.pos.mode.Employee">  
+    	 select * from tab_employee
+ 	</select>
+ 	
+ 	<select id="findByEmployeename" resultType="com.pos.mode.Employee">  
+    	 select * from tab_employee where employeeName like #{employeeName}
+ 	</select>
+    
+    <insert id="insert" parameterType="com.pos.mode.Employee">  
+    	 insert into tab_employee(	departmentName,
+    	 							employeeName,
+    	 						  	sex,
+    	 						  	address,
+    	 						  	phone,
+    	 						  	type,
+    	 						  	email,
+    	 						  	birthday,
+    	 						  	creator,
+    	 						  	creattime,
+    	 						  	modifier,
+    	 						  	modifytime) 
+    	 				values(	#{departmentName},
+    	 						#{employeeName},
+    	 						#{sex},
+    	 						#{address},
+    	 						#{phone},
+    	 						#{type},
+    	 						#{email},
+    	 						#{birthday},
+    	 						#{creator},
+    	 						#{creattime},
+    	 						#{modifier},
+    	 						#{modifytime})     
+ 	</insert>
+    
+    <update id="update"  parameterType="com.pos.mode.Employee">
+ 		 update tab_employee set  	departmentName = #{departmentName},
+ 		 						 	employeeName = #{employeeName},
+								 	sex = #{sex},
+								 	address = #{address},
+									phone = #{phone},			 		 						   
+ 		 							type = #{type},
+ 		 							email = #{email},
+ 		 							birthday = #{birthday},
+ 		 							creator = #{creator},
+ 		 							creattime = #{creattime},
+ 		 							modifier = #{modifier},
+ 		 							modifytime = #{modifytime}	
+ 		 					  where employeeID = #{employeeID}
+	</update>
+    
+    <delete id="delete">
+    	 delete from tab_employee where employeeID = #{employeeID}
+    </delete>
+    
+ </mapper>  

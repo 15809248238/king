@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+ 
+ <mapper namespace="com.pos.dao.CustomerDao"> 
+ 
+ 	<select id="findAll"  resultType="com.pos.mode.Customer">  
+    	 select * from tab_customer
+ 	</select>
+ 	
+ 	<select id="findByCustomername" resultType="com.pos.mode.Customer">  
+    	 select * from tab_customer where name like #{customerName}
+ 	</select>
+    
+    <insert id="insert" parameterType="com.pos.mode.Customer">  
+    	 insert into tab_customer(	name,sex,address,phone,email,
+    	 							creator,creattime,modifier,modifytime) 
+    	 values( #{name},#{sex},#{address},#{phone},#{email},
+    	 		#{creator},#{creattime},#{modifier},#{modifytime})     
+ 	</insert>
+    
+    <update id="update"  parameterType="com.pos.mode.Customer">
+ 		 update tab_customer set  	name = #{name},
+ 		 							sex = #{sex},
+									address = #{address},
+									phone = #{phone},
+									email = #{email},			 		 						   
+ 		 							creator = #{creator},
+ 		 							creattime = #{creattime},
+ 		 							modifier = #{modifier},
+ 		 							modifytime = #{modifytime}	
+ 		 where customerID = #{customerID}
+	</update>
+
+    <delete id="delete">
+    	 delete from tab_customer where customerID = #{customerID}
+    </delete>
+    
+ </mapper>  
