@@ -2,6 +2,8 @@ package com.pos.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.OutputStream;
@@ -11,6 +13,10 @@ import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -18,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import com.pos.mode.Employee;
+import com.pos.tool.CityMap;
 import com.pos.tool.GetSocket;
 import com.pos.tool.SingleUser;
 
@@ -31,7 +38,8 @@ public class EmployAddView extends JPanel implements ActionListener{
 	public JPanel panel0,panel1,panel2,panel3,panel4,panel5,panel6,panel7,panel8,panel9;
 	public JLabel mainlabel,label1,label2,label3,label4,label5,label6,label7,label8;
 	public JTextField textField1,textField2,textField3,textField4,textField5,textField6;
-	public JComboBox<String> jComboBox;
+	@SuppressWarnings("rawtypes")
+	public JComboBox jComboBox,jComboBoxP,jComboBoxC;;
 	public JRadioButton radioButton1,radioButton2;
 	
 	public EmployAddView(MainPosFrame mainPosFrame,Employee employee)
@@ -41,6 +49,7 @@ public class EmployAddView extends JPanel implements ActionListener{
 		init();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void init() {
 		this.setLayout(null);
 		
@@ -77,10 +86,20 @@ public class EmployAddView extends JPanel implements ActionListener{
 		panel4 = new JPanel();
 		panel4.setBounds(0,200,960,50);
 		label4 = new JLabel("地址");
-		textField3 = new JTextField(15);
-		textField3.setText(employee.getAddress());
+		String province=(String)getProvince()[0];
+		jComboBoxP = new JComboBox<>();
+		jComboBoxC = new JComboBox<>();
+		jComboBoxP.setModel(new DefaultComboBoxModel<>(getProvince()));
+		jComboBoxC.setModel(new DefaultComboBoxModel<>(getCity(province)));
+		jComboBoxP.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent arg0) {
+				itemChange();
+			}
+        });
 		panel4.add(label4);
-		panel4.add(textField3);
+		panel4.add(jComboBoxP);
+		panel4.add(jComboBoxC);
 		
 		panel5 = new JPanel();
 		panel5.setBounds(0,250,960,50);
@@ -133,9 +152,28 @@ public class EmployAddView extends JPanel implements ActionListener{
 		this.validate();
 	}
 	
-	public static void main(String[] args) {
-		new EmployAddView(new MainPosFrame(),new Employee());
-	}
+	public Object[] getProvince() {
+        Map<String, String[]> map = CityMap.model;// 获取省份信息保存到Map中
+        Set<String> set = map.keySet(); // 获取Map集合中的键，并以Set集合返回
+        Object[] province = set.toArray(); // 转换为数组
+        return province; // 返回获取的省份信息
+    }
+
+   
+    public String[] getCity(String selectProvince) {
+        Map<String, String[]> map = CityMap.model; // 获取省份信息保存到Map中
+        String[] arrCity = map.get(selectProvince); // 获取指定键的值
+        return arrCity; // 返回获取的市/县
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes"})
+	private void itemChange() {
+        String selectProvince = (String) jComboBoxP.getSelectedItem();
+        jComboBoxC.removeAllItems(); // 清空市/县列表
+        String[] arrCity = getCity(selectProvince); // 获取市/县
+        jComboBoxC.setModel(new DefaultComboBoxModel(arrCity)); // 重新添加市/县列表的值
+    }
+	
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -152,7 +190,7 @@ public class EmployAddView extends JPanel implements ActionListener{
 		{
 			employee.setSex("女");
 		}
-		employee.setAddress(textField3.getText());
+		employee.setAddress((String)jComboBoxP.getSelectedItem()+(String)jComboBoxC.getSelectedItem());
 		employee.setPhone(textField4.getText());
 		employee.setType((String)jComboBox.getSelectedItem());
 		employee.setEmail(textField5.getText());

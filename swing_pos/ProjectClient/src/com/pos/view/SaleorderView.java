@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -33,7 +34,7 @@ public class SaleorderView extends JPanel implements ActionListener{
 	public JScrollPane jsPane;
 	public JButton selbutton,delbutton,upbutton;
 	public JTable jTable;
-	public SaleOrder saleOrder;
+	public SaleOrder saleOrder = new SaleOrder();
 	
 	public SaleorderView(MainPosFrame mainPosFrame,List<SaleOrder> list) {
 		this.frame = mainPosFrame;
@@ -92,7 +93,6 @@ public class SaleorderView extends JPanel implements ActionListener{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int row = jTable.getSelectedRow();
-				saleOrder = new SaleOrder();
 				saleOrder.setSaleorderID((int)dtm.getValueAt(row,0));
 				saleOrder.setCustomerID((int)dtm.getValueAt(row,1));
 				saleOrder.setWarehouseID((int)dtm.getValueAt(row,2));
@@ -138,31 +138,41 @@ public class SaleorderView extends JPanel implements ActionListener{
 			
 		}else if(e.getSource()==delbutton){
 			
-			try {
-				OutputStream outputStream = socket.getOutputStream();
-				PrintWriter printWriter = new PrintWriter(outputStream);
-				String msg	= "sale+delete+"+saleOrder.toString();
-				printWriter.println(msg);
-				printWriter.flush();
+			if(saleOrder.getSaleorderID()!=0)
+			{
+				try {
+					OutputStream outputStream = socket.getOutputStream();
+					PrintWriter printWriter = new PrintWriter(outputStream);
+					String msg	= "sale+delete+"+saleOrder.toString();
+					printWriter.println(msg);
+					printWriter.flush();
+					
+					InputStream inputStream = socket.getInputStream();
+					ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+					List<SaleOrder> list = (List<SaleOrder>) objectInputStream.readObject();
+					
+					this.list = list;
+					this.remove(jsPane);
+					this.remove(jPanel);
+					init();
+				} catch (Exception e2) {
 				
-				InputStream inputStream = socket.getInputStream();
-				ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-				List<SaleOrder> list = (List<SaleOrder>) objectInputStream.readObject();
-				
-				this.list = list;
-				this.remove(jsPane);
-				this.remove(jPanel);
-				init();
-			} catch (Exception e2) {
-			
-		 }
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "删除对象为空", "警告",JOptionPane.WARNING_MESSAGE);
+			}
 			
 		}else if(e.getSource()==upbutton) {
-			
-			frame.remove(frame.panel);
-			frame.panel = new SaleorderAddView(frame, saleOrder);
-			frame.add(frame.panel);
-			frame.validate();
+			if(saleOrder.getSaleorderID()!=0)	{
+				frame.remove(frame.panel);
+				frame.panel = new SaleorderAddView(frame, saleOrder);
+				frame.add(frame.panel);
+				frame.validate();
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "修改对象为空", "警告",JOptionPane.WARNING_MESSAGE);
+			}
 		}
 	}
 	

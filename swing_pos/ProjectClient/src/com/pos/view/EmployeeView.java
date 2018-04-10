@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -33,7 +34,7 @@ public class EmployeeView extends JPanel implements ActionListener{
 	public JScrollPane jsPane;
 	public JButton selbutton,delbutton,upbutton;
 	public JTable jTable;
-	public Employee employee;
+	public Employee employee = new Employee();
 	
 	public EmployeeView(MainPosFrame mainPosFrame,List<Employee> list)
 	{
@@ -102,7 +103,6 @@ public class EmployeeView extends JPanel implements ActionListener{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int row = jTable.getSelectedRow();
-				employee = new Employee();
 				employee.setEmployeeID((int)dtm.getValueAt(row,0));
 				employee.setDepartmentName((String)dtm.getValueAt(row,1));
 				employee.setEmployeeName((String)dtm.getValueAt(row,2));
@@ -155,35 +155,42 @@ public class EmployeeView extends JPanel implements ActionListener{
 			
 		}else if(e.getSource()==delbutton){
 			
-			try {
-				OutputStream outputStream = socket.getOutputStream();
-				PrintWriter printWriter = new PrintWriter(outputStream);
-				String msg	= "employee+delete+"+employee.getEmployeeID()+"+"+employee.getDepartmentName();
-				printWriter.println(msg);
-				printWriter.flush();
-				
-				InputStream inputStream = socket.getInputStream();
-				ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-				
-				List<Employee> list = (List<Employee>) objectInputStream.readObject();
-				this.list = list;
-				this.remove(jsPane);
-				this.remove(jPanel);
-				init();
-		
-			} catch (Exception e2) {
+			if(employee.getEmployeeID()!=0)
+			{
+				try {
+					OutputStream outputStream = socket.getOutputStream();
+					PrintWriter printWriter = new PrintWriter(outputStream);
+					String msg	= "employee+delete+"+employee.getEmployeeID()+"+"+employee.getDepartmentName();
+					printWriter.println(msg);
+					printWriter.flush();
+					
+					InputStream inputStream = socket.getInputStream();
+					ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+					
+					List<Employee> list = (List<Employee>) objectInputStream.readObject();
+					this.list = list;
+					this.remove(jsPane);
+					this.remove(jPanel);
+					init();
 			
-		 }
+				} catch (Exception e2) {
+				
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "删除对象为空", "警告",JOptionPane.WARNING_MESSAGE);
+			}
 			
 		}else if(e.getSource()==upbutton) {
-			frame.remove(frame.panel);
-			frame.panel = new EmployAddView(frame, employee);
-			frame.add(frame.panel);
-			frame.validate();
+			if (employee.getEmployeeID()!=0) {
+				frame.remove(frame.panel);
+				frame.panel = new EmployAddView(frame, employee);
+				frame.add(frame.panel);
+				frame.validate();
+			} else {
+				JOptionPane.showMessageDialog(null, "修改对象为空", "警告",JOptionPane.WARNING_MESSAGE);
+			}
 		}
 	}
-//	public static void main(String[] args) {
-//		List<Employee> list = new ArrayList<>();
-//		new EmployeeView(new MainPosFrame(), list);
-//	}
+
 }

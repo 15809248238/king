@@ -1,5 +1,7 @@
 package com.pos.server.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,14 +16,12 @@ public class UserServicesImpl implements UserServices{
 	@Autowired
 	private UserDao userDao;
 	
-	@Autowired
-	private User user;
-	
 	@Override
 	public boolean login(User temp) {
 		
 		boolean flag = false;
-		user = userDao.finduserByUser(temp);
+		
+		List<User> user = userDao.finduserByUser(temp);
 		
 		if(user!=null)
 		{

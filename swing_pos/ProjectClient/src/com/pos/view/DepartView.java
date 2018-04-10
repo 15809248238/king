@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -34,7 +35,7 @@ public class DepartView extends JPanel implements ActionListener{
 	public JButton selbutton,delbutton,upbutton;
 	public JTable jTable;
 	public int departID;
-	public Department department;
+	public Department department = new Department();
 	
 	public DepartView(MainPosFrame mainPosFrame,List<Department> list)
 	{
@@ -101,7 +102,6 @@ public class DepartView extends JPanel implements ActionListener{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int row = jTable.getSelectedRow();
-				department = new Department();
 				department.setDepartmentID((int)dtm.getValueAt(row,0));
 				department.setParentdepartname((String)dtm.getValueAt(row,1));
 				department.setName((String)dtm.getValueAt(row,2));
@@ -150,31 +150,43 @@ public class DepartView extends JPanel implements ActionListener{
 			
 		}else if(e.getSource()==delbutton){
 			
-			try {
-				OutputStream outputStream = socket.getOutputStream();
-				PrintWriter printWriter = new PrintWriter(outputStream);
-				String msg	= "depart+delete+"+department.getDepartmentID();
-				printWriter.println(msg);
-				printWriter.flush();
-				
-				InputStream inputStream = socket.getInputStream();
-				ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-				
-				List<Department> list = (List<Department>) objectInputStream.readObject();
-				this.list = list;
-				this.remove(jsPane);
-				this.remove(jPanel);
-				init();
-		
-			} catch (Exception e2) {
+			if(department.getDepartmentID()!=0)
+			{
+				try {
+					OutputStream outputStream = socket.getOutputStream();
+					PrintWriter printWriter = new PrintWriter(outputStream);
+					String msg	= "depart+delete+"+department.getDepartmentID();
+					printWriter.println(msg);
+					printWriter.flush();
+					
+					InputStream inputStream = socket.getInputStream();
+					ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+					
+					List<Department> list = (List<Department>) objectInputStream.readObject();
+					this.list = list;
+					this.remove(jsPane);
+					this.remove(jPanel);
+					init();
 			
-		 }
+				} catch (Exception e2) {
+				
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "删除对象为空", "警告",JOptionPane.WARNING_MESSAGE);
+			}
 			
 		}else if(e.getSource()==upbutton) {
-			frame.remove(frame.panel);
-			frame.panel = new DepartAddView(frame, department);
-			frame.add(frame.panel);
-			frame.validate();
+			if(department.getDepartmentID()!=0)
+			{
+				frame.remove(frame.panel);
+				frame.panel = new DepartAddView(frame, department);
+				frame.add(frame.panel);
+				frame.validate();
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "修改对象为空", "警告",JOptionPane.WARNING_MESSAGE);
+			}
 		}
 	}
 	

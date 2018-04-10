@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -32,7 +33,7 @@ public class CargoView extends JPanel implements ActionListener{
 	public JScrollPane jsPane;
 	public JButton selbutton,delbutton,upbutton;
 	public JTable jTable;
-	public Cargo cargo;
+	public Cargo cargo = new Cargo();
 	public List<Cargo> list;
 	
 	public CargoView(MainPosFrame mainPosFrame,List<Cargo> list) {
@@ -96,7 +97,6 @@ public class CargoView extends JPanel implements ActionListener{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int row = jTable.getSelectedRow();
-				cargo = new Cargo();
 				cargo.setCargoID((int)dtm.getValueAt(row,0));
 				cargo.setCargoname((String)dtm.getValueAt(row,1));
 				cargo.setCargotypename((String)dtm.getValueAt(row,2));
@@ -142,31 +142,41 @@ public class CargoView extends JPanel implements ActionListener{
 			}
 			
 		}else if(e.getSource()==delbutton){
-			
-			try {
-				OutputStream outputStream = socket.getOutputStream();
-				PrintWriter printWriter = new PrintWriter(outputStream);
-				String msg	= "cargo+delete+"+cargo.getCargoID();
-				printWriter.println(msg);
-				printWriter.flush();
+			if(cargo.getCargoID()!=0)
+			{
+				try {
+					OutputStream outputStream = socket.getOutputStream();
+					PrintWriter printWriter = new PrintWriter(outputStream);
+					String msg	= "cargo+delete+"+cargo.getCargoID();
+					printWriter.println(msg);
+					printWriter.flush();
+					
+					InputStream inputStream = socket.getInputStream();
+					ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+					List<Cargo> list = (List<Cargo>) objectInputStream.readObject();
+					
+					this.list = list;
+					this.remove(jsPane);
+					this.remove(jPanel);
+					init();
+				} catch (Exception e2) {
 				
-				InputStream inputStream = socket.getInputStream();
-				ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-				List<Cargo> list = (List<Cargo>) objectInputStream.readObject();
-				
-				this.list = list;
-				this.remove(jsPane);
-				this.remove(jPanel);
-				init();
-			} catch (Exception e2) {
-			
-		 }
+			    }
+			}
+			else	{
+				JOptionPane.showMessageDialog(null, "删除对象为空", "警告",JOptionPane.WARNING_MESSAGE);
+			}
 			
 		}else if(e.getSource()==upbutton) {
-			frame.remove(frame.panel);
-			frame.panel = new CargoAddView(frame, cargo);
-			frame.add(frame.panel);
-			frame.validate();
+			if(cargo.getCargoID()!=0) {
+				frame.remove(frame.panel);
+				frame.panel = new CargoAddView(frame, cargo);
+				frame.add(frame.panel);
+				frame.validate();
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "修改对象为空", "警告",JOptionPane.WARNING_MESSAGE);  
+			}
 		}
 	}
 

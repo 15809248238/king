@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -33,7 +34,7 @@ public class PurchaseView extends JPanel implements ActionListener{
 	public JScrollPane jsPane;
 	public JButton selbutton,delbutton,upbutton;
 	public JTable jTable;
-	public Purchaseorder purchaseorder;
+	public Purchaseorder purchaseorder = new Purchaseorder();
 	
 	public PurchaseView(MainPosFrame mainPosFrame,List<Purchaseorder> list) {
 		this.frame = mainPosFrame;
@@ -90,7 +91,6 @@ public class PurchaseView extends JPanel implements ActionListener{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int row = jTable.getSelectedRow();
-				purchaseorder = new Purchaseorder();
 				purchaseorder.setPurchaseorderID((int) dtm.getValueAt(row, 0));
 				purchaseorder.setCustomerID((int) dtm.getValueAt(row, 1));
 				purchaseorder.setWarehouseID((int) dtm.getValueAt(row, 2));
@@ -135,31 +135,43 @@ public class PurchaseView extends JPanel implements ActionListener{
 			
 		}else if(e.getSource()==delbutton){
 			
-			try {
-				OutputStream outputStream = socket.getOutputStream();
-				PrintWriter printWriter = new PrintWriter(outputStream);
-				String msg	= "purchase+delete+"+purchaseorder.toString();
-				printWriter.println(msg);
-				printWriter.flush();
+			if(purchaseorder.getPurchaseorderID()!=0)
+			{
+				try {
+					OutputStream outputStream = socket.getOutputStream();
+					PrintWriter printWriter = new PrintWriter(outputStream);
+					String msg	= "purchase+delete+"+purchaseorder.toString();
+					printWriter.println(msg);
+					printWriter.flush();
+					
+					InputStream inputStream = socket.getInputStream();
+					ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+					List<Purchaseorder> list = (List<Purchaseorder>) objectInputStream.readObject();
+					
+					this.list = list;
+					this.remove(jsPane);
+					this.remove(jPanel);
+					init();
+				} catch (Exception e2) {
 				
-				InputStream inputStream = socket.getInputStream();
-				ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-				List<Purchaseorder> list = (List<Purchaseorder>) objectInputStream.readObject();
-				
-				this.list = list;
-				this.remove(jsPane);
-				this.remove(jPanel);
-				init();
-			} catch (Exception e2) {
-			
-		 }
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "删除对象为空", "警告",JOptionPane.WARNING_MESSAGE);
+			}
 			
 		}else if(e.getSource()==upbutton) {
 			
-			frame.remove(frame.panel);
-			frame.panel = new PurchaseAddView(frame,purchaseorder);
-			frame.add(frame.panel);
-			frame.validate();
+			if(purchaseorder.getPurchaseorderID()!=0)
+			{
+				frame.remove(frame.panel);
+				frame.panel = new PurchaseAddView(frame,purchaseorder);
+				frame.add(frame.panel);
+				frame.validate();
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "修改对象为空", "警告",JOptionPane.WARNING_MESSAGE);
+			}
 		}
 		
 	}

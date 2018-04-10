@@ -11,7 +11,7 @@ public class Dutil {
 		
 		if(ct == null)
 		{
-			ct = new ClassPathXmlApplicationContext("spring.xml");
+			ct = new ClassPathXmlApplicationContext("classpath:spring.xml");
 		}
 		
 		return ct;

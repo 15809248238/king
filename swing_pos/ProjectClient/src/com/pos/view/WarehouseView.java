@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -31,7 +32,7 @@ public class WarehouseView extends JPanel implements ActionListener{
 
 	public MainPosFrame frame;
 	public List<Warehouse> list;
-	public Warehouse warehouse;
+	public Warehouse warehouse = new Warehouse();
 	public JPanel jPanel;
 	public JTextField jTextField;
 	public JScrollPane jsPane;
@@ -102,7 +103,6 @@ public class WarehouseView extends JPanel implements ActionListener{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int row = jTable.getSelectedRow();
-				warehouse = new Warehouse();
 				warehouse.setWarehouseID((int)dtm.getValueAt(row,0));
 				warehouse.setName((String)dtm.getValueAt(row,1));
 				warehouse.setManager((String)dtm.getValueAt(row,2));
@@ -149,32 +149,41 @@ public class WarehouseView extends JPanel implements ActionListener{
 			
 		}else if(e.getSource()==delbutton){
 			
-			try {
-				OutputStream outputStream = socket.getOutputStream();
-				PrintWriter printWriter = new PrintWriter(outputStream);
-				String msg	= "ware+delete+"+warehouse.getWarehouseID();
-				printWriter.println(msg);
-				printWriter.flush();
+			if(warehouse.getWarehouseID()!=0)
+			{
+				try {
+					OutputStream outputStream = socket.getOutputStream();
+					PrintWriter printWriter = new PrintWriter(outputStream);
+					String msg	= "ware+delete+"+warehouse.getWarehouseID();
+					printWriter.println(msg);
+					printWriter.flush();
+					
+					InputStream inputStream = socket.getInputStream();
+					ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+					List<Warehouse> list = (List<Warehouse>) objectInputStream.readObject();
+					
+					this.list = list;
+					this.remove(jsPane);
+					this.remove(jPanel);
+					init();
+				} catch (Exception e2) {
 				
-				InputStream inputStream = socket.getInputStream();
-				ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-				List<Warehouse> list = (List<Warehouse>) objectInputStream.readObject();
-				
-				this.list = list;
-				this.remove(jsPane);
-				this.remove(jPanel);
-				init();
-			} catch (Exception e2) {
-			
-		 }
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "删除对象为空", "警告",JOptionPane.WARNING_MESSAGE);
+			}
 			
 		}else if(e.getSource()==upbutton) {
-			
-			frame.remove(frame.panel);
-			frame.panel = new WarehouseAddView(frame, warehouse);
-			frame.add(frame.panel);
-			frame.validate();
-		
+			if(warehouse.getWarehouseID()!=0)	{
+				frame.remove(frame.panel);
+				frame.panel = new WarehouseAddView(frame, warehouse);
+				frame.add(frame.panel);
+				frame.validate();
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "修改对象为空", "警告",JOptionPane.WARNING_MESSAGE);
+			}
 		}else if (e.getSource()==initButton) {
 			try {
 				OutputStream outputStream = socket.getOutputStream();

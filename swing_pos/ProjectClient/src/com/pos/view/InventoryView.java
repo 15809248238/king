@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -35,7 +36,7 @@ public class InventoryView extends JPanel implements ActionListener{
 	public JScrollPane jsPane;
 	public JButton selbutton,delbutton,upbutton;
 	public JTable jTable;
-	public Inventory inventory;
+	public Inventory inventory = new Inventory();
 	
 	public InventoryView(MainPosFrame mainPosFrame,List<Inventory> list) {
 	
@@ -99,7 +100,6 @@ public class InventoryView extends JPanel implements ActionListener{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int row = jTable.getSelectedRow();
-				inventory = new Inventory();
 				inventory.setInventoryID((int)dtm.getValueAt(row,0));
 				inventory.setWarehouseID((int)dtm.getValueAt(row,1));
 				inventory.setCargoID((int)dtm.getValueAt(row,2));
@@ -145,50 +145,62 @@ public class InventoryView extends JPanel implements ActionListener{
 			
 		}else if(e.getSource()==delbutton){
 			
-			try {
-				OutputStream outputStream = socket.getOutputStream();
-				PrintWriter printWriter = new PrintWriter(outputStream);
-				String msg	= "invent+delete+"+inventory.getInventoryID();
-				printWriter.println(msg);
-				printWriter.flush();
+			if(inventory.getInventoryID()!=0)
+			{
+				try {
+					OutputStream outputStream = socket.getOutputStream();
+					PrintWriter printWriter = new PrintWriter(outputStream);
+					String msg	= "invent+delete+"+inventory.getInventoryID();
+					printWriter.println(msg);
+					printWriter.flush();
+					
+					InputStream inputStream = socket.getInputStream();
+					ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+					List<Inventory> list = (List<Inventory>) objectInputStream.readObject();
+					
+					this.list = list;
+					this.remove(jsPane);
+					this.remove(jPanel);
+					init();
+				} catch (Exception e2) {
 				
-				InputStream inputStream = socket.getInputStream();
-				ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-				List<Inventory> list = (List<Inventory>) objectInputStream.readObject();
-				
-				this.list = list;
-				this.remove(jsPane);
-				this.remove(jPanel);
-				init();
-			} catch (Exception e2) {
-			
-		 }
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "删除对象为空", "警告",JOptionPane.WARNING_MESSAGE);
+			}
 			
 		}else if(e.getSource()==upbutton) {
-			try {
-				
-				OutputStream outputStream = socket.getOutputStream();
-				PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(outputStream,"utf-8"));
-				String msg	= "cargo+select+"+jTextField.getText();
-				printWriter.println(msg);
-				printWriter.flush();
-				
-				InputStream inputStream = socket.getInputStream();
-				ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-				List<Cargo> list = (List<Cargo>) objectInputStream.readObject();
-				String[] temp = new String[list.size()];
-				for(int i=0;i<list.size();i++)
-				{
-					temp[i] = list.get(i).getCargoID()+"";
+			if(inventory.getInventoryID()!=0)
+			{
+				try {
+					
+					OutputStream outputStream = socket.getOutputStream();
+					PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(outputStream,"utf-8"));
+					String msg	= "cargo+select+"+jTextField.getText();
+					printWriter.println(msg);
+					printWriter.flush();
+					
+					InputStream inputStream = socket.getInputStream();
+					ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+					List<Cargo> list = (List<Cargo>) objectInputStream.readObject();
+					String[] temp = new String[list.size()];
+					for(int i=0;i<list.size();i++)
+					{
+						temp[i] = list.get(i).getCargoID()+"";
+					}
+					
+					frame.remove(frame.panel);
+					frame.panel = new InventoryInitView(frame, inventory.getWarehouseID(), temp,inventory);
+					frame.add(frame.panel);
+					frame.validate();
+					
+				} catch (Exception e2) {
+					
 				}
-				
-				frame.remove(frame.panel);
-				frame.panel = new InventoryInitView(frame, inventory.getWarehouseID(), temp,inventory);
-				frame.add(frame.panel);
-				frame.validate();
-				
-			} catch (Exception e2) {
-				
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "修改对象为空", "警告",JOptionPane.WARNING_MESSAGE);
 			}
 		}
 	}
