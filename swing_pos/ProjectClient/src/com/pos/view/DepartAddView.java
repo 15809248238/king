@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import com.pos.mode.Department;
@@ -101,6 +102,7 @@ public class DepartAddView extends JPanel implements ActionListener{
 	@SuppressWarnings("unchecked")
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		String msg = null;
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		
@@ -123,24 +125,30 @@ public class DepartAddView extends JPanel implements ActionListener{
 			msg	= "depart+update+"+department.toString();
 		}
 		
-		try {
-			Socket socket = GetSocket.getSocke();
-			OutputStream outputStream = socket.getOutputStream();
-			PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(outputStream,"utf-8"));
-			printWriter.println(msg);
-			printWriter.flush();
+		if(!"".equals(department.getName()))
+		{
+			try {
+				Socket socket = GetSocket.getSocke();
+				OutputStream outputStream = socket.getOutputStream();
+				PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(outputStream,"utf-8"));
+				printWriter.println(msg);
+				printWriter.flush();
+				
+				InputStream inputStream = socket.getInputStream();
+				ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+				List<Department> list = (List<Department>) objectInputStream.readObject();
+				
+				frame.remove(frame.panel);
+				frame.panel = new DepartView(frame,list);
+				frame.add(frame.panel);
+				frame.validate();
+				
+			} catch (Exception e2) {
 			
-			InputStream inputStream = socket.getInputStream();
-			ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-			List<Department> list = (List<Department>) objectInputStream.readObject();
-			
-			frame.remove(frame.panel);
-			frame.panel = new DepartView(frame,list);
-			frame.add(frame.panel);
-			frame.validate();
-			
-		} catch (Exception e2) {
-		
+			}
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "字段为空", "警告",JOptionPane.WARNING_MESSAGE);
 		}
 	}
 }
