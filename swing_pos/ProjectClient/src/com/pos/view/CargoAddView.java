@@ -113,26 +113,26 @@ public class CargoAddView extends JPanel implements ActionListener{
 			cargo.setModifytime(df.format(new Date()));
 			msg = "cargo+update+"+cargo.toString();
 		}
-		
-		try {
-			Socket socket = GetSocket.getSocke();
-			OutputStream outputStream = socket.getOutputStream();
-			PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(outputStream,"utf-8"));
-			printWriter.println(msg);
-			printWriter.flush();
+		if(!"".equals(cargo.getCargoname()))	{
+			try {
+				Socket socket = GetSocket.getSocke();
+				OutputStream outputStream = socket.getOutputStream();
+				PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(outputStream,"utf-8"));
+				printWriter.println(msg);
+				printWriter.flush();
 			
-			InputStream inputStream = socket.getInputStream();
-			ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-			List<Cargo> list = (List<Cargo>) objectInputStream.readObject();
-			frame.remove(frame.panel);
-			frame.panel = new CargoView(frame,list);
-			frame.add(frame.panel);
-			frame.validate();
+				InputStream inputStream = socket.getInputStream();
+				ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+				List<Cargo> list = (List<Cargo>) objectInputStream.readObject();
+				frame.remove(frame.panel);
+				frame.panel = new CargoView(frame,list);
+				frame.add(frame.panel);
+				frame.validate();
 			
-		} catch (Exception e2) {
+			} catch (Exception e2) {
 			
+			}
 		}
-		
 	}
 	
 }

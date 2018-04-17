@@ -14,6 +14,8 @@ public interface InventoryDao {
 	
 	public List<Inventory> findByAmount(@Param("warehouseID")int warehouseID,@Param("cargoID")int cargoID,@Param("amount")int amount);
 	
+	public List<Inventory> findByWarehouseIDAndCargo(@Param("warehouseID")int warehouseID,@Param("cargoID")int cargoID);
+	
 	public boolean insert(Inventory inventory);
 	
 	public boolean update(Inventory inventory);
@@ -21,4 +23,6 @@ public interface InventoryDao {
 	public boolean updateAmountBywarehouseID(@Param("warehouseID")int warehouseID,@Param("cargoID")int cargoID,@Param("amount")int amount);
 			
 	public boolean delete(@Param("inventoryID")int inventoryID);
+	
+	public boolean deleteByWarehouseAndCargo(@Param("warehouseID")int warehouseID,@Param("cargoID")int cargoID);
 }

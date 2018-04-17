@@ -42,7 +42,7 @@ public class PurchaseAddView extends JPanel implements ActionListener{
 		
 		panel1 = new JPanel();
 		panel1.setBounds(0, 0, 960, 50);
-		mainLabel = new JLabel("添加销售单");
+		mainLabel = new JLabel("添加采购单");
 		panel1.add(mainLabel);
 		
 		panel2 = new JPanel();

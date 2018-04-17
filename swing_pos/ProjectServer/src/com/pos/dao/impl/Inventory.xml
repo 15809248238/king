@@ -11,6 +11,10 @@
  	<select id="findByWarehouseID" resultType="com.pos.mode.Inventory">  
     	 select * from tab_inventory where warehouseID = #{warehouseID}
  	</select>
+ 	
+ 	<select id="findByWarehouseIDAndCargo" resultType="com.pos.mode.Inventory">  
+    	 select * from tab_inventory where warehouseID = #{warehouseID} and cargoID = #{cargoID}
+ 	</select>
     
     <select id="findByAmount" resultType="com.pos.mode.Inventory">
     	select * from tab_inventory where warehouseID = #{warehouseID} and cargoID = #{cargoID}  and amount > #{amount}
@@ -40,6 +44,10 @@
 
     <delete id="delete">
     	 delete from tab_inventory where inventoryID = #{inventoryID}
+    </delete>
+    
+    <delete id="deleteByWarehouseAndCargo">
+    	 delete from tab_inventory where warehouseID = #{warehouseID} and cargoID = #{cargoID}
     </delete>
     
  </mapper>  

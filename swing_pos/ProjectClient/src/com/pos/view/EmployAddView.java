@@ -2,6 +2,8 @@ package com.pos.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.InputStream;
@@ -15,11 +17,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -84,8 +89,8 @@ public class EmployAddView extends JPanel implements ActionListener{
 		panel3.add(radioButton2);
 		
 		panel4 = new JPanel();
-		panel4.setBounds(0,200,960,50);
-		label4 = new JLabel("地址");
+		panel4.setBounds(0,400,960,50);
+		label4 = new JLabel("地址       ");
 		String province=(String)getProvince()[0];
 		jComboBoxP = new JComboBox<>();
 		jComboBoxC = new JComboBox<>();
@@ -108,6 +113,27 @@ public class EmployAddView extends JPanel implements ActionListener{
 		textField4.setText(employee.getPhone());
 		panel5.add(label5);
 		panel5.add(textField4);
+		textField4.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				String str = textField4.getText().toString();
+				String reg = "1[3|4|5|8][0-9]\\d{8}$";
+				Pattern pattern = Pattern.compile(reg);
+				Matcher matcher = pattern.matcher(str);
+				boolean rs = matcher.matches();
+				if(rs!=true)
+				{
+					JOptionPane.showMessageDialog(null, "格式错误", "警告",JOptionPane.WARNING_MESSAGE);
+				}	
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+
+			}
+		});
+		
 		
 		panel6 = new JPanel();
 		panel6.setBounds(0,300,960,50);
@@ -123,14 +149,57 @@ public class EmployAddView extends JPanel implements ActionListener{
 		textField5.setText(employee.getEmail());
 		panel7.add(label7);
 		panel7.add(textField5);
+		textField5.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				String str = textField4.getText().toString();
+				
+				String reg = "[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$";
+				Pattern pattern = Pattern.compile(reg);
+				Matcher matcher = pattern.matcher(str);
+				boolean rs = matcher.matches();
+				if(rs!=true)
+				{
+					JOptionPane.showMessageDialog(null, "格式错误", "警告",JOptionPane.WARNING_MESSAGE);
+				}	
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+
+			}
+		});
 		
 		panel8 = new JPanel();
-		panel8.setBounds(0,400,960,50);
+		panel8.setBounds(0,200,960,50);
 		label8 = new JLabel("生日");
 		textField6 = new JTextField(15);
 		textField6.setText(employee.getBirthday());
 		panel8.add(label8);
 		panel8.add(textField6);
+		textField6.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				String str = textField6.getText().toString();
+				
+				String reg = "\\d{4}(\\-)\\d{1,2}\\1\\d{1,2}$";
+				Pattern pattern = Pattern.compile(reg);
+				Matcher matcher = pattern.matcher(str);
+				boolean rs = matcher.matches();
+				if(rs!=true)
+				{
+					JOptionPane.showMessageDialog(null, "格式错误例如：1990-01-01", "警告",JOptionPane.WARNING_MESSAGE);
+				}	
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				
+			}
+		});
+		
 		
 		panel9 = new JPanel();
 		panel9.setBounds(0,450,960,50);
@@ -209,25 +278,30 @@ public class EmployAddView extends JPanel implements ActionListener{
 			employee.setModifytime(df.format(new Date()));
 			msg = "employee+update+"+employee.toString();
 		}
-		
-		try {
-			Socket socket = GetSocket.getSocke();
-			OutputStream outputStream = socket.getOutputStream();
-			PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(outputStream,"utf-8"));
-			printWriter.println(msg);
-			printWriter.flush();
+		if(!"".equals(employee.getEmployeeName())&&!"".equals(employee.getDepartmentName())) {
+			try {
+				Socket socket = GetSocket.getSocke();
+				OutputStream outputStream = socket.getOutputStream();
+				PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(outputStream,"utf-8"));
+				printWriter.println(msg);
+				printWriter.flush();
+				
+				InputStream inputStream = socket.getInputStream();
+				ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+				List<Employee> list = (List<Employee>) objectInputStream.readObject();
+				frame.remove(frame.panel);
+				frame.panel = new EmployeeView(frame,list);
+				frame.add(frame.panel);
+				frame.validate();
+				
+			} catch (Exception e2) {
 			
-			InputStream inputStream = socket.getInputStream();
-			ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-			List<Employee> list = (List<Employee>) objectInputStream.readObject();
-			frame.remove(frame.panel);
-			frame.panel = new EmployeeView(frame,list);
-			frame.add(frame.panel);
-			frame.validate();
-			
-		} catch (Exception e2) {
-		
+			}
 		}
+		else {
+			JOptionPane.showMessageDialog(null, "字段为空", "警告",JOptionPane.WARNING_MESSAGE);
+		}
+		
 		
 	}
 }

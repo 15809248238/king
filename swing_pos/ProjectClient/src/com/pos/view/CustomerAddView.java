@@ -2,6 +2,8 @@ package com.pos.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.InputStream;
@@ -15,10 +17,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -71,7 +77,7 @@ public class CustomerAddView extends JPanel implements ActionListener{
 		
 		panel3 = new JPanel();
 		String province=(String)getProvince()[0];
-		panel3.setBounds(0, 180, 960, 60);
+		panel3.setBounds(0, 300, 960, 60);
 		label2 = new JLabel("地址       ");
 		jComboBoxP = new JComboBox<>();
 		jComboBoxC = new JComboBox<>();
@@ -87,18 +93,58 @@ public class CustomerAddView extends JPanel implements ActionListener{
 		panel3.add(label2);panel3.add(jComboBoxP);panel3.add(jComboBoxC);
 		
 		panel4 = new JPanel();
-		panel4.setBounds(0, 240, 960, 60);
+		panel4.setBounds(0, 180, 960, 60);
 		label3 = new JLabel("手机");
 		textField1 = new JTextField(13);
 		textField1.setText(customer.getPhone());
 		panel4.add(label3);panel4.add(textField1);
+		textField1.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				String str = textField1.getText().toString();
+				String reg = "1[3|4|5|8][0-9]\\d{8}$";
+				Pattern pattern = Pattern.compile(reg);
+				Matcher matcher = pattern.matcher(str);
+				boolean rs = matcher.matches();
+				if(rs!=true)
+				{
+					JOptionPane.showMessageDialog(null, "格式错误", "警告",JOptionPane.WARNING_MESSAGE);
+				}	
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				
+			}
+		});
 		
 		panel5 = new JPanel();
-		panel5.setBounds(0, 300, 960, 60);
+		panel5.setBounds(0, 240, 960, 60);
 		label4 = new JLabel("邮箱");
 		textField2 = new JTextField(13);
 		textField2.setText(customer.getEmail());
 		panel5.add(label4);panel5.add(textField2);
+		textField2.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				String str = textField2.getText().toString();
+				String reg = "[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$";
+				Pattern pattern = Pattern.compile(reg);
+				Matcher matcher = pattern.matcher(str);
+				boolean rs = matcher.matches();
+				if(rs!=true)
+				{
+					JOptionPane.showMessageDialog(null, "格式错误", "警告",JOptionPane.WARNING_MESSAGE);
+				}	
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				// TODO Auto-generated method stub
+			}
+		});
 		
 		panel6 = new JPanel();
 		panel6.setBounds(0, 360, 960, 60);
@@ -172,24 +218,30 @@ public class CustomerAddView extends JPanel implements ActionListener{
 			msg = "customer+update+"+customer.toString();
 		}
 		
-		try {
-			Socket socket = GetSocket.getSocke();
-			OutputStream outputStream = socket.getOutputStream();
-			PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(outputStream,"utf-8"));
-			printWriter.println(msg);
-			printWriter.flush();
-			
-			InputStream inputStream = socket.getInputStream();
-			ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-			List<Customer> list = (List<Customer>) objectInputStream.readObject();
-			
-			frame.remove(frame.panel);
-			frame.panel = new CustomerView(frame,list);
-			frame.add(frame.panel);
-			frame.validate();
-			
-		} catch (Exception e2) {
-			
+		if(!"".equals(customer.getName()))
+		{
+			try {
+				Socket socket = GetSocket.getSocke();
+				OutputStream outputStream = socket.getOutputStream();
+				PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(outputStream,"utf-8"));
+				printWriter.println(msg);
+				printWriter.flush();
+				
+				InputStream inputStream = socket.getInputStream();
+				ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+				List<Customer> list = (List<Customer>) objectInputStream.readObject();
+				
+				frame.remove(frame.panel);
+				frame.panel = new CustomerView(frame,list);
+				frame.add(frame.panel);
+				frame.validate();
+				
+			} catch (Exception e2) {
+				
+			}
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "字段为空", "警告",JOptionPane.WARNING_MESSAGE);
 		}
 		
 	}
