@@ -113,7 +113,7 @@ public class EmployeeControl {
 	private void delete(String[] args) {
 		
 		EmployeeServices employeeServices = (EmployeeServicesImpl)ct.getBean("employeeServicesImpl");
-		List<Employee> list = employeeServices.delete(Integer.parseInt(args[2]),args[3]);
+		List<Employee> list = employeeServices.delete(Integer.parseInt(args[2]),args[3],args[4]);
 		OutputStream outputStream = null;
 		ObjectOutputStream objectOutputStream = null;
 		try {

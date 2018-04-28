@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Map;
+
 import org.springframework.context.ApplicationContext;
 
 
@@ -14,6 +16,7 @@ public class Control extends Thread{
 	
 	public Socket socket;
 	public ApplicationContext ct;
+	public Map<String,String> map;
 	public Control(Socket socket,ApplicationContext ct)
 	{
 		this.socket = socket;
@@ -79,6 +82,12 @@ public class Control extends Thread{
 					}
 					else if("purchase".equals(args[0]))	{
 						new PurchaseControl(socket,msg,ct);
+					}
+					else if("user".equals(args[0]))	{
+						new UserControl(socket, msg, ct);
+					}
+					else if("database".equals(args[0]))	{
+						new DataControl(socket, msg, ct);
 					}
 				}
 			}			

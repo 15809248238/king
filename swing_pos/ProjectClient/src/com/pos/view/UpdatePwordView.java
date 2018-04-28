@@ -110,6 +110,7 @@ public class UpdatePwordView implements ActionListener{
 		
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -126,7 +127,6 @@ public class UpdatePwordView implements ActionListener{
 			try {
 				
 				String username = userText.getText();
-				@SuppressWarnings("deprecation")
 				String password = passwordText0.getText();
 				User user = new User();
 				user.setUsername(username);
@@ -134,7 +134,7 @@ public class UpdatePwordView implements ActionListener{
 				
 				outputStream = socket.getOutputStream();
 				printWriter = new PrintWriter(outputStream);
-				msg	= "login+update+"+user.toString();
+				msg	= "login+update+"+user.toString()+"+"+passwordText1.getText();
 				printWriter.println(msg);
 				printWriter.flush();
 			

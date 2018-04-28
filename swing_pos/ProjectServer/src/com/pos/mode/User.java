@@ -1,24 +1,17 @@
 package com.pos.mode;
 
-import org.springframework.stereotype.Component;
+import java.io.Serializable;//io对象流传输必须实现该接口
 
-@Component
-public class User {
+@SuppressWarnings("serial")
+public class User implements Serializable{
+
+	private int userID;
 	
 	private String username;
 	
 	private String password;
 	
-	public User()
-	{
-		
-	}
-	
-	public User(String username,String password)
-	{
-		this.username = username;
-		this.password = password;
-	}
+	private String type;
 
 	public String getUsername() {
 		return username;
@@ -34,6 +27,27 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public String toString()
+	{
+		return userID+"+"+username+"+"+password+"+"+type;	
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public int getUserID() {
+		return userID;
+	}
+
+	public void setUserID(int userID) {
+		this.userID = userID;
 	}
 	
 }

@@ -58,7 +58,7 @@ public class PurchaseControl {
 		purchaseorder.setStatus(args[8]);
 		PurchaseServices  purchaseServices =(PurchaseServicesImpl)ct.getBean("purchaseServicesImpl");
 		
-		List<Purchaseorder> list = purchaseServices.update(purchaseorder);
+		List<Purchaseorder> list = purchaseServices.update(purchaseorder,socket);
 		
 		OutputStream outputStream = null;
 		ObjectOutputStream objectOutputStream = null;

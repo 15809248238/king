@@ -49,18 +49,21 @@ public class EmployeeServicesImpl implements EmployeeServices{
 	public List<Employee> insert(Employee employee) {
 		List<Employee> list = null;
 		
-		updateDepartEmployeeCount(employee.getDepartmentName(),1);
-		
-		User user = new User();
-		user.setUsername(employee.getPhone());
-		user.setPassword("123456");
-		userDao.insertUserByUser(user);
-		
-		if(employeeDao.insert(employee))
-		{
-			list = findAll();
+		if(updateDepartEmployeeCount(employee.getDepartmentName(),1)) {
+			
+			User user = new User();
+			user.setUsername(employee.getPhone());
+			user.setPassword("123456");
+			user.setType(employee.getType());
+			
+			userDao.insertUserByUser(user);
+			
+			if(employeeDao.insert(employee))
+			{
+				list = findAll();
+			}	
 		}
-		
+		list = findAll();
 		return list;
 	}
 
@@ -71,6 +74,10 @@ public class EmployeeServicesImpl implements EmployeeServices{
 		
 		if(employeeDao.update(employee))
 		{
+			User user = new User();
+			user.setUsername(employee.getPhone());
+			user.setType(employee.getType());
+			userDao.updateUserTypeByUser(user);
 			list = findAll();
 		}
 		
@@ -78,23 +85,27 @@ public class EmployeeServicesImpl implements EmployeeServices{
 	}
 
 	@Override
-	public List<Employee> delete(int employeeID,String departname) {
+	public List<Employee> delete(int employeeID,String departname,String phone) {
 		List<Employee> list = null;
 		updateDepartEmployeeCount(departname,-1);
 		if(employeeDao.delete(employeeID))
 		{
+			userDao.deleteByUsername(phone);
 			list = findAll();
 		}
 		return list;
 	}
 
-	public void updateDepartEmployeeCount(String departName,int num)
+	public boolean updateDepartEmployeeCount(String departName,int num)
 	{
+		boolean flag = false;
 		departDao.updateEmployeeCount(departName,num);
 		List<Department> list = departDao.findByDepartname(departName);
 		
-		if(!"".equals(list.get(0).getParentdepartname())) {
+		if(list.size()>0) {
 			updateDepartEmployeeCount(list.get(0).getParentdepartname(),num);
+			flag = true;
 		}
+		return flag;
 	}
 }

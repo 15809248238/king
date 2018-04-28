@@ -16,18 +16,16 @@ public class UserServicesImpl implements UserServices{
 	private UserDao userDao;
 	
 	@Override
-	public boolean login(User temp) {
+	public User login(User temp) {
 		
-		boolean flag = false;
-		
-		List<User> user = userDao.finduserByUser(temp);
+		User user = userDao.finduserByUser(temp);
 		
 		if(user!=null)
 		{
-			flag = true;
+			return user;
 		}	
 		
-		return flag;
+		return null;
 	}
 	
 	@Override
@@ -44,15 +42,51 @@ public class UserServicesImpl implements UserServices{
 	}
 	
 	@Override
-	public boolean update(User user) {
+	public boolean update(String username,String password,String newpassword) {
 		boolean flag = false;
 		
-		if(userDao.updateUserByUser(user))
+		if(userDao.updateUserByUser(username,password,newpassword))
 		{
 			flag = true;
 		}
 		
 		return flag;
+	}
+
+	@Override
+	public List<User> findAllRoot() {
+		List<User> list = null;
+		list = userDao.findAllRoot();
+		return list;
+	}
+
+	@Override
+	public List<User> findRootByUsername(String username) {
+		List<User> list = null;
+		list = userDao.findRootByUsername(username);
+		return list;
+	}
+
+	@Override
+	public List<User> deleteByUserID(int userID) {
+		List<User> list = null;
+		if(userDao.deleteByUserID(userID))
+		{
+			list = findAllRoot();
+		}
+		return list;
+	}
+
+	@Override
+	public List<User> save(User user) {
+		List<User> list = null;
+		
+		if(userDao.insertUserByUser(user))
+		{
+			list = findAllRoot();
+		}
+		
+		return list;
 	}
 
 }

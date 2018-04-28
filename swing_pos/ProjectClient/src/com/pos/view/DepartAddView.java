@@ -39,7 +39,6 @@ public class DepartAddView extends JPanel implements ActionListener{
 	{
 		this.frame= mainPosFrame;
 		this.department = department;
-		
 		init();
 	}
 
@@ -159,7 +158,7 @@ public class DepartAddView extends JPanel implements ActionListener{
 		this.add(panel3);
 		this.add(panel4);
 		this.add(panel5);
-		
+		this.repaint();
 		this.validate();
 	}
 

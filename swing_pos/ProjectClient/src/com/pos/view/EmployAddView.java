@@ -36,7 +36,7 @@ import com.pos.tool.SingleUser;
 @SuppressWarnings("serial")
 public class EmployAddView extends JPanel implements ActionListener{
 	
-	private String[] string = {"系统管理员","仓库管理员","入库管理员","出库管理员","人事管理员","客户管理员","货物管理员","部门管理员"};
+	private String[] string = {"总经理","仓库管理员","销售管理员","采购管理员","人事管理员","客户管理员","货物管理员","部门管理员"};
 	public MainPosFrame frame;
 	public Employee employee;
 	public JButton saveButton;
@@ -68,6 +68,10 @@ public class EmployAddView extends JPanel implements ActionListener{
 		label1 = new JLabel("部门");
 		textField1 = new JTextField(15);
 		textField1.setText(employee.getDepartmentName());
+		if(employee.getEmployeeID()!=0)
+		{
+			textField1.setEditable(false);
+		}
 		panel1.add(label1);
 		panel1.add(textField1);
 		
@@ -111,6 +115,10 @@ public class EmployAddView extends JPanel implements ActionListener{
 		label5 = new JLabel("手机");
 		textField4 = new JTextField(15);
 		textField4.setText(employee.getPhone());
+		if(employee.getEmployeeID()!=0)
+		{
+			textField4.setEditable(false);
+		}
 		panel5.add(label5);
 		panel5.add(textField4);
 		textField4.addFocusListener(new FocusListener() {
@@ -153,7 +161,7 @@ public class EmployAddView extends JPanel implements ActionListener{
 			
 			@Override
 			public void focusLost(FocusEvent e) {
-				String str = textField4.getText().toString();
+				String str = textField5.getText().toString();
 				
 				String reg = "[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$";
 				Pattern pattern = Pattern.compile(reg);

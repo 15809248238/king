@@ -19,6 +19,14 @@ import javax.swing.JTextField;
 import com.pos.mode.User;
 import com.pos.tool.GetSocket;
 import com.pos.tool.SingleUser;
+import com.pos.view.cargo.MainPosFrameCargo;
+import com.pos.view.customer.MainPosFrameCustomer;
+import com.pos.view.department.MainPosFrameDepartment;
+import com.pos.view.employee.MainPosFrameEmployee;
+import com.pos.view.purchase.MainPosFramePurchase;
+import com.pos.view.root.MainPosFrameRoot;
+import com.pos.view.sale.MainPosFrameSale;
+import com.pos.view.warehouse.MainPosFrameWarehouse;
 
 public class LoginView implements ActionListener{
 	
@@ -138,9 +146,49 @@ public class LoginView implements ActionListener{
 				bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 				msg = bufferedReader.readLine();
 				
-				if("yes".equals(msg))	{
-					frame.dispose();
-					new MainPosFrame();
+				String[] args = msg.split("\\+");
+				
+				if("yes".equals(args[0]))	{
+					//权限控制
+					if("总经理".equals(args[1]))
+					{
+						frame.dispose();
+						new MainPosFrame();
+					}
+					else if("部门管理员".equals(args[1]))
+					{
+						frame.dispose();
+						new MainPosFrameDepartment();
+					}
+					else if ("人事管理员".equals(args[1])) {
+						frame.dispose();
+						new MainPosFrameEmployee();
+					}
+					else if ("客户管理员".equals(args[1])) {
+						frame.dispose();
+						new MainPosFrameCustomer();
+					}
+					else if ("货物管理员".equals(args[1])) {
+						frame.dispose();
+						new MainPosFrameCargo();
+					}
+					else if ("仓库管理员".equals(args[1])) {
+						frame.dispose();
+						new MainPosFrameWarehouse();
+					}
+					else if ("销售管理员".equals(args[1])) {
+						frame.dispose();
+						new MainPosFrameSale();
+					}
+					else if ("采购管理员".equals(args[1])) {
+						frame.dispose();
+						new MainPosFramePurchase();
+					}
+					else if ("root".equals(args[1])||"superroot".equals(args[1])) {
+						frame.dispose();
+						new MainPosFrameRoot(args[1]);
+					}
+					
 				}
 				else {
 					frame.dispose();

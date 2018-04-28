@@ -13,6 +13,6 @@ public interface EmployeeServices {
 	
 	public List<Employee> update(Employee employee);
 	
-	public List<Employee> delete(int employeeID,String departname);
+	public List<Employee> delete(int employeeID,String departname,String type);
 	
 }

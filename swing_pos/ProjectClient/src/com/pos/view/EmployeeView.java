@@ -160,7 +160,7 @@ public class EmployeeView extends JPanel implements ActionListener{
 				try {
 					OutputStream outputStream = socket.getOutputStream();
 					PrintWriter printWriter = new PrintWriter(outputStream);
-					String msg	= "employee+delete+"+employee.getEmployeeID()+"+"+employee.getDepartmentName();
+					String msg	= "employee+delete+"+employee.getEmployeeID()+"+"+employee.getDepartmentName()+"+"+employee.getPhone();
 					printWriter.println(msg);
 					printWriter.flush();
 					

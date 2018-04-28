@@ -3,7 +3,11 @@ package com.pos.control;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Map;
+
 import org.springframework.context.ApplicationContext;
+
+import com.pos.duitl.GetMap;
 import com.pos.mode.User;
 import com.pos.server.UserServices;
 import com.pos.server.impl.UserServicesImpl;
@@ -40,19 +44,22 @@ public class LoginControl {
 	public void validate(String[] args) {
 		System.out.println("login+"+msg);
 		User user = new User();
-		user.setUsername(args[2]);
-		user.setPassword(args[3]);
-		
+		user.setUserID(Integer.parseInt(args[2]));
+		user.setUsername(args[3]);
+		user.setPassword(args[4]);
+		user.setType(args[5]);
 		UserServices userServices = (UserServicesImpl)ct.getBean("userServicesImpl");
+		User user2 = userServices.login(user);
 		String temp = "no";
-		if(true==userServices.login(user))
+		if(user2!=null)
 		{
-			temp = "yes";
+			temp = "yes+"+user2.getType();
+			Map<Socket,String> map = GetMap.getSingleMap();
+			map.put(socket,user.getUsername());
 		}
 		OutputStream outputStream = null;
 		PrintWriter printWriter = null;
 		try {
-			
 			outputStream = socket.getOutputStream();
 			printWriter = new PrintWriter(outputStream);
 			printWriter.println(temp);
@@ -65,13 +72,10 @@ public class LoginControl {
 	//修改密码
 	public void update(String[] args) {
 		System.out.println("update+"+msg);
-		User user = new User();
-		user.setUsername(args[2]);
-		user.setPassword(args[3]);
 		
 		UserServices userServices = (UserServicesImpl)ct.getBean("userServicesImpl");
 		
-		if(true==userServices.update(user))
+		if(true==userServices.update(args[2],args[3],args[4]))
 		{
 			OutputStream outputStream = null;
 			PrintWriter printWriter = null;
