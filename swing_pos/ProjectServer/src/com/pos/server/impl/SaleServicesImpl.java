@@ -2,26 +2,36 @@ package com.pos.server.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.pos.dao.InventoryDao;
 import com.pos.dao.SaleDao;
 import com.pos.mode.Inventory;
 import com.pos.mode.SaleOrder;
 import com.pos.server.SaleServices;
 
-@Transactional
-@Component
 public class SaleServicesImpl implements SaleServices{
 	
-	@Autowired
+	
 	private SaleDao saleDao;
 	
-	@Autowired
+	
+	public SaleDao getSaleDao() {
+		return saleDao;
+	}
+
+	public void setSaleDao(SaleDao saleDao) {
+		this.saleDao = saleDao;
+	}
+
 	private InventoryDao inventoryDao;
 	
+	public InventoryDao getInventoryDao() {
+		return inventoryDao;
+	}
+
+	public void setInventoryDao(InventoryDao inventoryDao) {
+		this.inventoryDao = inventoryDao;
+	}
+
 	@Override
 	public List<SaleOrder> findAll() {
 		List<SaleOrder> list = null;

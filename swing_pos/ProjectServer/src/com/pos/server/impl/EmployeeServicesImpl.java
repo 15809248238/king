@@ -2,10 +2,6 @@ package com.pos.server.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.pos.dao.DepartDao;
 import com.pos.dao.EmployeeDao;
 import com.pos.dao.UserDao;
@@ -14,19 +10,41 @@ import com.pos.mode.Employee;
 import com.pos.mode.User;
 import com.pos.server.EmployeeServices;
 
-@Transactional
-@Component
 public class EmployeeServicesImpl implements EmployeeServices{
 
-	@Autowired
+	
 	private EmployeeDao employeeDao;
 	
-	@Autowired
+	
+	public EmployeeDao getEmployeeDao() {
+		return employeeDao;
+	}
+
+	public void setEmployeeDao(EmployeeDao employeeDao) {
+		this.employeeDao = employeeDao;
+	}
+
 	private DepartDao departDao;
 	
-	@Autowired
+	
+	public DepartDao getDepartDao() {
+		return departDao;
+	}
+
+	public void setDepartDao(DepartDao departDao) {
+		this.departDao = departDao;
+	}
+
 	private UserDao userDao;
 	
+	public UserDao getUserDao() {
+		return userDao;
+	}
+
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
+	}
+
 	@Override
 	public List<Employee> findAll() {
 		

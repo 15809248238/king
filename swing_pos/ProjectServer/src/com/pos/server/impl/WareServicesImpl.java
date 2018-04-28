@@ -2,20 +2,22 @@ package com.pos.server.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import com.pos.dao.WareDao;
 import com.pos.mode.Warehouse;
 import com.pos.server.WareServices;
 
-@Transactional
-@Component
 public class WareServicesImpl implements WareServices{
 
-	@Autowired
 	private WareDao wareDao;
 	
+	public WareDao getWareDao() {
+		return wareDao;
+	}
+
+	public void setWareDao(WareDao wareDao) {
+		this.wareDao = wareDao;
+	}
+
 	@Override
 	public List<Warehouse> findAll() {
 		List<Warehouse> list = null;

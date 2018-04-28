@@ -1,20 +1,23 @@
 package com.pos.server.impl;
 
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import com.pos.dao.DepartDao;
 import com.pos.mode.Department;
 import com.pos.server.DepartServices;
 
-@Transactional
-@Component
+
 public class DepartServicesImpl implements DepartServices{
 	
-	@Autowired
+	
 	private DepartDao departDao;
+
+	public DepartDao getDepartDao() {
+		return departDao;
+	}
+
+	public void setDepartDao(DepartDao departDao) {
+		this.departDao = departDao;
+	}
 
 	@Override
 	public List<Department> findAll() {

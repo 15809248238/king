@@ -34,20 +34,7 @@
      </property>  
  </bean>  
  
- 	
- <!--配置事务管理器 -->
- <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
- 	<property name="dataSource" ref="dataSource"></property>
- </bean>
  
- 
- <!-- 开启事务注解 -->
- <!--<tx:annotation-driven transaction-manager="transactionManager" />-->
- <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
- 
- <!-- 组件扫描 -->
- <context:component-scan base-package="com.pos" />
- 	
  <!-- 配置sessionFactory -->	
  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
      <property name="dataSource" ref="dataSource" />  
@@ -108,4 +95,44 @@
      <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
  </bean>
 
+ <bean id="cargoServicesImpl" class="com.pos.server.impl.CargoServicesImpl">
+ 	 <property name="cargoDao" ref="cargoDao"></property>
+ </bean>
+ 
+ <bean id="customerServicesImpl" class="com.pos.server.impl.CustomerServicesImpl">
+ 	 <property name="customerDao" ref="customerDao"></property>
+ </bean>
+ 
+ <bean id="departServicesImpl" class="com.pos.server.impl.DepartServicesImpl">
+ 	 <property name="departDao" ref="departDao"></property>
+ </bean>
+ 
+ <bean id="employeeServicesImpl" class="com.pos.server.impl.EmployeeServicesImpl">
+ 	 <property name="employeeDao" ref="employeeDao"></property>
+ 	 <property name="departDao" ref="departDao"></property>
+ 	 <property name="userDao" ref="userDao"></property>
+ </bean>
+
+ <bean id="inventoryServicesImpl" class="com.pos.server.impl.InventoryServicesImpl">
+ 	 <property name="inventoryDao" ref="inventoryDao"></property>
+ </bean> 
+ 
+ <bean id="purchaseServicesImpl" class="com.pos.server.impl.PurchaseServicesImpl">
+ 	 <property name="inventoryDao" ref="inventoryDao"></property>
+ 	 <property name="purchaseDao" ref="purchaseDao"></property>
+ </bean> 
+
+ <bean id="saleServicesImpl" class="com.pos.server.impl.SaleServicesImpl">
+ 	 <property name="saleDao" ref="saleDao"></property>
+ 	 <property name="inventoryDao" ref="inventoryDao"></property>
+ </bean>
+ 
+ <bean id="userServicesImpl" class="com.pos.server.impl.UserServicesImpl">
+ 	 <property name="userDao" ref="userDao"></property>
+ </bean>
+ 
+ <bean id="wareServicesImpl" class="com.pos.server.impl.WareServicesImpl">
+ 	 <property name="wareDao" ref="wareDao"></property>
+ </bean>
+ 
 </beans>

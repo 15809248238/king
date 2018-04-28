@@ -2,21 +2,25 @@ package com.pos.server.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import com.pos.dao.InventoryDao;
 import com.pos.mode.Inventory;
 import com.pos.server.InventoryServices;
 
-@Transactional
-@Component
+
 public class InventoryServicesImpl implements InventoryServices{
 
-	@Autowired
+	
 	private InventoryDao inventoryDao;
 	
 	
+	public InventoryDao getInventoryDao() {
+		return inventoryDao;
+	}
+
+	public void setInventoryDao(InventoryDao inventoryDao) {
+		this.inventoryDao = inventoryDao;
+	}
+
 	@Override
 	public List<Inventory> findAll() {
 		

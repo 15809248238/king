@@ -6,10 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.pos.dao.InventoryDao;
 import com.pos.dao.PurchaseDao;
 import com.pos.duitl.GetMap;
@@ -17,16 +13,30 @@ import com.pos.mode.Inventory;
 import com.pos.mode.Purchaseorder;
 import com.pos.server.PurchaseServices;
 
-@Transactional
-@Component
 public class PurchaseServicesImpl implements PurchaseServices{
 	
-	@Autowired
+	
 	private InventoryDao inventoryDao;
 	
-	@Autowired
+	
+	public InventoryDao getInventoryDao() {
+		return inventoryDao;
+	}
+
+	public void setInventoryDao(InventoryDao inventoryDao) {
+		this.inventoryDao = inventoryDao;
+	}
+
 	private PurchaseDao purchaseDao;
 	
+
+	public PurchaseDao getPurchaseDao() {
+		return purchaseDao;
+	}
+
+	public void setPurchaseDao(PurchaseDao purchaseDao) {
+		this.purchaseDao = purchaseDao;
+	}
 
 	@Override
 	public List<Purchaseorder> findAll() {
