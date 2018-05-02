@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  
+      xmlns="http://www.springframework.org/schema/beans"
+      xmlns:context="http://www.springframework.org/schema/context"  
+      xmlns:tx="http://www.springframework.org/schema/tx"  
+      xmlns:p="http://www.springframework.org/schema/p"  
+      xmlns:aop="http://www.springframework.org/schema/aop"   
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+      xsi:schemaLocation="http://www.springframework.org/schema/beans    
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd   
+      http://www.springframework.org/schema/tx   
+      http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context.xsd   
+      http://www.springframework.org/schema/aop    
+      http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+	
+ <!-- 加载资源文件 -->
+ <context:property-placeholder location="classpath:database.properties"/>
+ 
+ <!-- 配置数据源-->  
+ <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">  
+     <property name="driverClassName">  
+         <value>${db.driver}</value>  
+     </property>  
+     <property name="url">  
+        <value>${db.url}</value>  
+     </property>  
+     <property name="username">  
+         <value>${db.username}</value>  
+     </property>  
+     <property name="password">  
+         <value>${db.password}</value>  
+     </property>  
+ </bean>  
+ 
+ 
+ <!-- 配置sessionFactory -->	
+ <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
+     <property name="dataSource" ref="dataSource" />  
+     <property name="configLocation" value="classpath:mybaits-config.xml"></property>  
+ </bean>
+ 
+ <!-- 创建userDao实例 -->  
+ <bean id="userDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+     <property name="mapperInterface" value="com.pos.dao.UserDao"></property>  
+     <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
+ </bean>
+   
+ <!-- 创建departDao实例 --> 
+ <bean id="departDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+     <property name="mapperInterface" value="com.pos.dao.DepartDao"></property>  
+     <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
+ </bean>
+ 
+ <!-- 创建employeetDao实例 --> 
+ <bean id="employeeDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+     <property name="mapperInterface" value="com.pos.dao.EmployeeDao"></property>  
+     <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
+ </bean>
+ 
+ <!-- 创建customerDao实例 --> 
+ <bean id="customerDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+     <property name="mapperInterface" value="com.pos.dao.CustomerDao"></property>  
+     <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
+ </bean>
+ 
+ <!-- 创建cargoDao实例 --> 
+ <bean id="cargoDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+     <property name="mapperInterface" value="com.pos.dao.CargoDao"></property>  
+     <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
+ </bean>
+ 
+ <!-- 创建wareDao实例 --> 
+ <bean id="wareDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+     <property name="mapperInterface" value="com.pos.dao.WareDao"></property>  
+     <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
+ </bean>
+ 
+ <!-- 创建inventoryDao实例 --> 
+ <bean id="inventoryDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+     <property name="mapperInterface" value="com.pos.dao.InventoryDao"></property>  
+     <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
+ </bean>
+ 
+ <!-- 创建saleDao实例 --> 
+ <bean id="saleDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+     <property name="mapperInterface" value="com.pos.dao.SaleDao"></property>  
+     <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
+ </bean>
+ 
+ <!-- 创建purchaseDao实例 --> 
+ <bean id="purchaseDao" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+     <property name="mapperInterface" value="com.pos.dao.PurchaseDao"></property>  
+     <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>  
+ </bean>
+
+ <bean id="cargoServicesImpl" class="com.pos.server.impl.CargoServicesImpl">
+ 	 <property name="cargoDao" ref="cargoDao"></property>
+ </bean>
+ 
+ <bean id="customerServicesImpl" class="com.pos.server.impl.CustomerServicesImpl">
+ 	 <property name="customerDao" ref="customerDao"></property>
+ </bean>
+ 
+ <bean id="departServicesImpl" class="com.pos.server.impl.DepartServicesImpl">
+ 	 <property name="departDao" ref="departDao"></property>
+ </bean>
+ 
+ <bean id="employeeServicesImpl" class="com.pos.server.impl.EmployeeServicesImpl">
+ 	 <property name="employeeDao" ref="employeeDao"></property>
+ 	 <property name="departDao" ref="departDao"></property>
+ 	 <property name="userDao" ref="userDao"></property>
+ </bean>
+
+ <bean id="inventoryServicesImpl" class="com.pos.server.impl.InventoryServicesImpl">
+ 	 <property name="inventoryDao" ref="inventoryDao"></property>
+ </bean> 
+ 
+ <bean id="purchaseServicesImpl" class="com.pos.server.impl.PurchaseServicesImpl">
+ 	 <property name="inventoryDao" ref="inventoryDao"></property>
+ 	 <property name="purchaseDao" ref="purchaseDao"></property>
+ </bean> 
+
+ <bean id="saleServicesImpl" class="com.pos.server.impl.SaleServicesImpl">
+ 	 <property name="saleDao" ref="saleDao"></property>
+ 	 <property name="inventoryDao" ref="inventoryDao"></property>
+ </bean>
+ 
+ <bean id="userServicesImpl" class="com.pos.server.impl.UserServicesImpl">
+ 	 <property name="userDao" ref="userDao"></property>
+ </bean>
+ 
+ <bean id="wareServicesImpl" class="com.pos.server.impl.WareServicesImpl">
+ 	 <property name="wareDao" ref="wareDao"></property>
+ </bean>
+ 
+</beans>

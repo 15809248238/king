@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+ 
+ <mapper namespace="com.pos.dao.WareDao"> 
+ 
+ 	<select id="findAll"  resultType="com.pos.mode.Warehouse">  
+    	 select * from tab_warehouse
+ 	</select>
+ 	
+ 	<select id="findByWarehousename" resultType="com.pos.mode.Warehouse">  
+    	 select * from tab_warehouse where name like #{warehouseName}
+ 	</select>
+    
+    <insert id="insert" parameterType="com.pos.mode.Warehouse">  
+    	 insert into tab_warehouse(	name,manager,address,status,creator,creattime,modifier,modifytime) 
+    	 values( #{name},#{manager},#{address},#{status},#{creator},#{creattime},#{modifier},#{modifytime})     
+ 	</insert>
+    
+    <update id="update"  parameterType="com.pos.mode.Warehouse">
+ 		 update tab_warehouse 	set name = #{name},
+ 		 							manager = #{manager},
+									address = #{address},
+									status = #{status},	 						   
+ 		 							creator = #{creator},
+ 		 							creattime = #{creattime},
+ 		 							modifier = #{modifier},
+ 		 							modifytime = #{modifytime}	
+ 		 where warehouseID = #{warehouseID}
+	</update>
+
+    <delete id="delete">
+    	 delete from tab_warehouse where warehouseID = #{warehouseID}
+    </delete>
+    
+ </mapper>  

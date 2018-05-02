@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+ 
+ <mapper namespace="com.pos.dao.DepartDao"> 
+ 
+ 	<select id="findAll"  resultType="com.pos.mode.Department">  
+    	 select * from tab_department
+ 	</select>
+ 	
+ 	<select id="findByDepartname" resultType="com.pos.mode.Department">  
+    	 select * from tab_department where name like #{departname}
+ 	</select>
+    
+    <insert id="insert" parameterType="com.pos.mode.Department">  
+    	 insert into tab_department(parentdepartname,name,manager,departmentphone,
+    	 							employeecount,creator,creattime,modifier,modifytime) 
+    	 values(#{parentdepartname},#{name},#{manager},#{departmentphone},#{employeecount},
+    	 		#{creator},#{creattime},#{modifier},#{modifytime})     
+ 	</insert>
+    
+    <update id="update"  parameterType="com.pos.mode.Department">
+ 		 update tab_department set  parentdepartname = #{parentdepartname},
+ 		 							name = #{name},
+									manager = #{manager},
+									departmentphone = #{departmentphone},
+									employeecount = #{employeecount},			 		 						   
+ 		 							creator = #{creator},
+ 		 							creattime = #{creattime},
+ 		 							modifier = #{modifier},
+ 		 							modifytime = #{modifytime}	
+ 		 where departmentID = #{departmentID}
+	</update>
+	
+	<update id="updateEmployeeCount">
+ 		 update tab_department set  employeecount = employeecount + #{num} where name = #{departname}
+	</update>
+    
+    <delete id="delete">
+    	 delete from tab_department where departmentID = #{departID}
+    </delete>
+    
+ </mapper>  

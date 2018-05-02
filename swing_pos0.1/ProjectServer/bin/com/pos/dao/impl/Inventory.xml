@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+ 
+ <mapper namespace="com.pos.dao.InventoryDao"> 
+ 
+ 	<select id="findAll"  resultType="com.pos.mode.Inventory">  
+    	 select * from tab_inventory
+ 	</select>
+ 	
+ 	<select id="findByWarehouseID" resultType="com.pos.mode.Inventory">  
+    	 select * from tab_inventory where warehouseID = #{warehouseID}
+ 	</select>
+ 	
+ 	<select id="findByWarehouseIDAndCargo" resultType="com.pos.mode.Inventory">  
+    	 select * from tab_inventory where warehouseID = #{warehouseID} and cargoID = #{cargoID}
+ 	</select>
+    
+    <select id="findByAmount" resultType="com.pos.mode.Inventory">
+    	select * from tab_inventory where warehouseID = #{warehouseID} and cargoID = #{cargoID}  and amount > #{amount}
+    </select>
+    
+    <insert id="insert" parameterType="com.pos.mode.Inventory">  
+    	 insert into tab_inventory(	warehouseID,cargoID,amount,
+    	 							creator,creattime,modifier,modifytime) 
+    	 values( #{warehouseID},#{cargoID},#{amount},
+    	 		#{creator},#{creattime},#{modifier},#{modifytime})     
+ 	</insert>
+    
+    <update id="update"  parameterType="com.pos.mode.Inventory">
+ 		 update tab_inventory 	set  warehouseID = #{warehouseID},
+ 		 							 cargoID = #{cargoID},
+									 amount = #{amount},	 						   
+ 		 							 creator = #{creator},
+ 		 							 creattime = #{creattime},
+ 		 							 modifier = #{modifier},
+ 		 							 modifytime = #{modifytime}	
+ 		 where inventoryID = #{inventoryID}
+	</update>
+	
+	<update id="updateAmountBywarehouseID">
+		 update tab_inventory 	set amount = amount + #{amount} where warehouseID = #{warehouseID} and cargoID = #{cargoID}
+	</update>
+
+    <delete id="delete">
+    	 delete from tab_inventory where inventoryID = #{inventoryID}
+    </delete>
+    
+    <delete id="deleteByWarehouseAndCargo">
+    	 delete from tab_inventory where warehouseID = #{warehouseID} and cargoID = #{cargoID}
+    </delete>
+    
+ </mapper>  

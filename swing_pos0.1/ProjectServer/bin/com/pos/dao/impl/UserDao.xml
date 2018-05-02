@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+ 
+ <mapper namespace="com.pos.dao.UserDao"> 
+ 
+ 	<select id="finduserByUser" parameterType="com.pos.mode.User" resultType="com.pos.mode.User">  
+    	 SELECT * FROM tab_user WHERE username=#{username} AND password=#{password}
+ 	</select>
+ 	
+ 	<select id="findRootByUsername"  resultType="com.pos.mode.User">  
+    	 SELECT * FROM tab_user WHERE username=#{username} AND (type="root" or type="superroot")
+ 	</select>
+ 	
+ 	<select id="findAllRoot" resultType="com.pos.mode.User">  
+    	 SELECT * FROM tab_user WHERE type="root" or type="superroot"
+ 	</select>
+    
+    <insert id="insertUserByUser" parameterType="com.pos.mode.User">  
+    	 insert into tab_user(username,password,type) values(#{username},#{password},#{type})     
+ 	</insert>
+    
+    <update id="updateUserByUser">
+ 		 update tab_user set password = #{password} where username = #{username}
+	</update>
+	
+	<update id="updateUserTypeByUser"  parameterType="com.pos.mode.User">
+ 		 update tab_user set type = #{type} where username = #{username}
+	</update>
+    
+    <delete id="deleteByUsername">
+         delete from tab_user where username = #{username}
+    </delete>
+    
+    <delete id="deleteByUserID">
+         delete from tab_user where userID = #{userID}
+    </delete>
+    
+ </mapper>  

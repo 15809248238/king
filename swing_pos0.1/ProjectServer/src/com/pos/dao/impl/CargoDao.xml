@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+ 
+ <mapper namespace="com.pos.dao.CargoDao"> 
+ 
+ 	<select id="findAll"  resultType="com.pos.mode.Cargo">  
+    	 select * from tab_cargo
+ 	</select>
+ 	
+ 	<select id="findByCargorname" resultType="com.pos.mode.Cargo">  
+    	 select * from tab_cargo where cargoname like #{cargoName}
+ 	</select>
+    
+    <insert id="insert" parameterType="com.pos.mode.Cargo">  
+    	 insert into tab_cargo(	cargoname,cargotypename,inprice,outprice,
+    	 							creator,creattime,modifier,modifytime) 
+    	 values( #{cargoname},#{cargotypename},#{inprice},#{outprice},
+    	 		#{creator},#{creattime},#{modifier},#{modifytime})     
+ 	</insert>
+    
+    <update id="update"  parameterType="com.pos.mode.Cargo">
+ 		 update tab_cargo 	set  	cargoname = #{cargoname},
+ 		 							cargotypename = #{cargotypename},
+									inprice = #{inprice},
+									outprice = #{outprice},	 						   
+ 		 							creator = #{creator},
+ 		 							creattime = #{creattime},
+ 		 							modifier = #{modifier},
+ 		 							modifytime = #{modifytime}	
+ 		 where cargoID = #{cargoID}
+	</update>
+
+    <delete id="delete">
+    	 delete from tab_cargo where cargoID = #{cargoID}
+    </delete>
+    
+ </mapper>  
