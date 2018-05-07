@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContext;
 import com.pos.control.Control;
 import com.pos.duitl.Dutil;
 import com.pos.duitl.GetMap;
+import com.pos.view.LoginView;
 
 public class ServerMain{
 	
@@ -20,8 +21,8 @@ public class ServerMain{
 	private static ApplicationContext ct = Dutil.getApplicationContext();
 	
 	public static void main(String[] args) {
-		
 		try {
+			new LoginView();
 			serverSocket = new ServerSocket(port);
 			
 			while(true)

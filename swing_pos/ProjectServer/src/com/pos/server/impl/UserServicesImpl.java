@@ -45,10 +45,10 @@ public class UserServicesImpl implements UserServices{
 	}
 	
 	@Override
-	public boolean update(String username,String password,String newpassword) {
+	public boolean update(String username,String password) {
 		boolean flag = false;
-		
-		if(userDao.updateUserByUser(username,password,newpassword))
+		System.out.println("hahah   "+username);
+		if(userDao.updateUserByUser(username,password))
 		{
 			flag = true;
 		}
@@ -90,6 +90,16 @@ public class UserServicesImpl implements UserServices{
 		}
 		
 		return list;
+	}
+
+	@Override
+	public boolean updatePassword(String username, String password, String newpassword) {
+		boolean flag = false;
+		if(userDao.upodatePassword(username, password,newpassword))
+		{
+			flag = true;
+		}
+		return flag;
 	}
 
 }

@@ -16,7 +16,9 @@ public interface UserServices {
 	
 	public List<User> save(User user);
 	
-	public boolean update(String username,String password,String newpassword);
+	public boolean update(String username,String password);
+	
+	public boolean updatePassword(String username,String password,String newpassword);
 	
 	public List<User> deleteByUserID(int userID);
 	

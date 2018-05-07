@@ -201,7 +201,7 @@ public class LoginView implements ActionListener{
 		}
 		else {
 			frame.dispose();
-			new UpdatePwordView();
+			new ForgetPwordView();
 		}
 	}
 }

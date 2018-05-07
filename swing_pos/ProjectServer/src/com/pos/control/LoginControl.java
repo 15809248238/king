@@ -35,11 +35,35 @@ public class LoginControl {
 		{
 			validate(args);
 		}
+		else if("forget".equals(args[1])){
+			updatePassword(args);
+			System.out.println("asdasda"+args);
+		}
 		else {
 			update(args);
 		}
 	}
 	
+	private void updatePassword(String[] args) {
+		
+		UserServices userServices = (UserServicesImpl)ct.getBean("userServicesImpl");
+		
+		if(true==userServices.updatePassword(args[2],args[3],args[4]))
+		{
+			OutputStream outputStream = null;
+			PrintWriter printWriter = null;
+			try {
+				String temp = "yes";
+				outputStream = socket.getOutputStream();
+				printWriter = new PrintWriter(outputStream);
+				printWriter.println(temp);
+				printWriter.flush();
+			} catch (Exception e) {
+				
+			}
+		}
+	}
+
 	//登录验证
 	public void validate(String[] args) {
 		System.out.println("login+"+msg);
@@ -75,7 +99,7 @@ public class LoginControl {
 		
 		UserServices userServices = (UserServicesImpl)ct.getBean("userServicesImpl");
 		
-		if(true==userServices.update(args[2],args[3],args[4]))
+		if(true==userServices.update(args[3],args[4]))
 		{
 			OutputStream outputStream = null;
 			PrintWriter printWriter = null;

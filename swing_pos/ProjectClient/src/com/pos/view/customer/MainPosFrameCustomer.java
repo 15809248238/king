@@ -25,7 +25,7 @@ public class MainPosFrameCustomer extends JFrame implements ActionListener{
 	
 	public JMenuBar bar;
 	public JMenu customerMenu,personalMenu;
-	public JMenuItem ctadd,ctselect,logout,usermessage;
+	public JMenuItem ctadd,ctselect,logout,usermessage,updatepassword;
 	public JFrame jFrame;
 	public JPanel panel = new JPanel();
 	
@@ -47,8 +47,10 @@ public class MainPosFrameCustomer extends JFrame implements ActionListener{
 		//菜单项	
 		personalMenu = new JMenu("个人中心");
 		logout = new JMenuItem("注销");
+		updatepassword = new JMenuItem("修改密码");
 		usermessage = new JMenuItem(SingleUser.getUser().getUsername());
 		personalMenu.add(usermessage);
+		personalMenu.add(updatepassword);
 		personalMenu.add(logout);
 		bar.add(personalMenu);
 	
@@ -60,6 +62,7 @@ public class MainPosFrameCustomer extends JFrame implements ActionListener{
 		bar.add(customerMenu);
 		
 		logout.addActionListener(this);
+		updatepassword.addActionListener(this);
 		
 		ctadd.addActionListener(this);
 		ctselect.addActionListener(this);
@@ -82,6 +85,10 @@ public class MainPosFrameCustomer extends JFrame implements ActionListener{
 			panel = new CustomerView(this,list);
 			this.add(panel);
 			this.validate();
+			
+		}else if (e.getSource()==updatepassword) {
+
+			new UpdatePasswordView();
 			
 		}else if (e.getSource()==logout){
 			

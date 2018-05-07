@@ -25,7 +25,7 @@ public class MainPosFrameWarehouse extends JFrame implements ActionListener{
 	
 	public JMenuBar bar;
 	public JMenu warehouseMenu,personalMenu;
-	public JMenuItem whadd,whselect,logout,usermessage;
+	public JMenuItem whadd,whselect,logout,usermessage,updatepassword;
 	public JFrame jFrame;
 	public JPanel panel = new JPanel();
 	
@@ -47,8 +47,10 @@ public class MainPosFrameWarehouse extends JFrame implements ActionListener{
 		//菜单项	
 		personalMenu = new JMenu("个人中心");
 		logout = new JMenuItem("注销");
+		updatepassword = new JMenuItem("修改密码");
 		usermessage = new JMenuItem(SingleUser.getUser().getUsername());
 		personalMenu.add(usermessage);
+		personalMenu.add(updatepassword);
 		personalMenu.add(logout);
 		bar.add(personalMenu);
 	
@@ -58,7 +60,9 @@ public class MainPosFrameWarehouse extends JFrame implements ActionListener{
 		warehouseMenu.add(whadd);
 		warehouseMenu.add(whselect);
 		bar.add(warehouseMenu);
+		
 		logout.addActionListener(this);
+		updatepassword.addActionListener(this);
 		
 		whadd.addActionListener(this);
 		whselect.addActionListener(this);
@@ -82,6 +86,10 @@ public class MainPosFrameWarehouse extends JFrame implements ActionListener{
 			panel = new WarehouseView(this,list);
 			this.add(panel);
 			this.validate();
+		
+		}if (e.getSource()==updatepassword) {
+			
+			new UpdatePasswordView();
 		
 		}else if (e.getSource()==logout){
 			

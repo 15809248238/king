@@ -86,9 +86,6 @@ public class Control extends Thread{
 					else if("user".equals(args[0]))	{
 						new UserControl(socket, msg, ct);
 					}
-					else if("database".equals(args[0]))	{
-						new DataControl(socket, msg, ct);
-					}
 				}
 			}			
 				

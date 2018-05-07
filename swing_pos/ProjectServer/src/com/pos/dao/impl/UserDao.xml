@@ -20,8 +20,12 @@
     	 insert into tab_user(username,password,type) values(#{username},#{password},#{type})     
  	</insert>
     
-    <update id="updateUserByUser">
+    <update id="upodatePassword">
  		 update tab_user set password = #{newpassword} where username = #{username} and password = #{password}
+	</update>
+	
+    <update id="updateUserByUser">
+ 		 update tab_user set password = #{password} where username = #{username}
 	</update>
 	
 	<update id="updateUserTypeByUser"  parameterType="com.pos.mode.User">

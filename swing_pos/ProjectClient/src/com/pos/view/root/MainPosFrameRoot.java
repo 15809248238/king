@@ -27,7 +27,7 @@ public class MainPosFrameRoot extends JFrame implements ActionListener{
 	
 	public JMenuBar bar;
 	public JMenu personalMenu,adminMenu,dataMenu;
-	public JMenuItem logout,usermessage,adselect,adadd,databackups;
+	public JMenuItem logout,usermessage,adselect,adadd,databackups,updatepassword;
 	public JFrame jFrame;
 	public JPanel panel = new JPanel();
 	public String temp = null;
@@ -50,9 +50,11 @@ public class MainPosFrameRoot extends JFrame implements ActionListener{
 		
 		//菜单项	
 		personalMenu = new JMenu("个人中心");
+		updatepassword = new JMenuItem("修改密码");
 		logout = new JMenuItem("注销");
 		usermessage = new JMenuItem(SingleUser.getUser().getUsername());
 		personalMenu.add(usermessage);
+		personalMenu.add(updatepassword);
 		personalMenu.add(logout);
 		bar.add(personalMenu);
 	
@@ -74,6 +76,7 @@ public class MainPosFrameRoot extends JFrame implements ActionListener{
 		bar.add(dataMenu);
 		
 		logout.addActionListener(this);
+		updatepassword.addActionListener(this);
 		
 		databackups.addActionListener(this);
 		
@@ -103,6 +106,10 @@ public class MainPosFrameRoot extends JFrame implements ActionListener{
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+		}else if (e.getSource()==updatepassword) {
+			
+			new UpdatePasswordView();
+			
 		}else if (e.getSource()==adadd) {
 			this.remove(panel);
 			this.panel = new RootUserAddView(this);

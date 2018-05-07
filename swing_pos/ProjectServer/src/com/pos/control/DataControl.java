@@ -5,43 +5,33 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.Socket;
-
-import org.springframework.context.ApplicationContext;
 
 public class DataControl {
 
 	public String msg;
-	public Socket socket;
-	public ApplicationContext ct;
-	
-	public DataControl(Socket socket, String msg, ApplicationContext ct) {
+	public String result;
+	public DataControl(String msg) {
 		this.msg = msg;
-		this.socket = socket;
-		this.ct = ct;
-		analysis();
+		this.result = analysis();
 	}
 
-	private void analysis() {
+	private String analysis() {
 
 		String[] args = msg.split("\\+");
-		try {  
-            if (exportDatabaseTool(args[1],args[2],args[3],args[4],args[5],args[6])) {  
-            	msg = "yes";
-            } else {  
-            	msg = "no";
-            }
-            OutputStream outputStream = socket.getOutputStream();
-			PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(outputStream,"utf-8"));
-			printWriter.println(msg);
-			printWriter.flush();
-			
-        } catch (Exception e) {  
-            e.printStackTrace();  
-        }
+        try {
+			if (exportDatabaseTool(args[1],args[2],args[3],args[4],args[5],args[6])) {  
+				msg = "yes";
+			} 
+			else {  
+			    msg = "no";
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+           
+        return msg;
 	}
 
 	public boolean exportDatabaseTool(String hostIP, String userName, String password, String savePath, String fileName, String databaseName) throws InterruptedException {  

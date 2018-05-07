@@ -16,7 +16,9 @@ public interface UserDao {
 	
 	public boolean insertUserByUser(User user);
 	
-	public boolean updateUserByUser(@Param("username")String username,@Param("password")String password,@Param("newpassword")String newpassword);
+	public boolean upodatePassword(@Param("username")String username,@Param("password")String password,@Param("newpassword")String newpassword);
+	
+	public boolean updateUserByUser(@Param("username")String username,@Param("password")String password);
 	
 	public boolean updateUserTypeByUser(User user);
 	
