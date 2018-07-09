@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.blog.dao.UserDao" >  
+
+<!--配置一个resultMap 指定返回的类型 -->
+	<resultMap id="UserInfo" type="com.blog.entity.User">
+        <id column="userid" property="userid" />
+        <result column="username" property="username" />
+        <result column="passowrd" property="passowrd" />
+    </resultMap>
+
+	<select id="select" parameterType="java.lang.String" resultMap="UserInfo">
+        select * from user where userid = #{userid}
+    </select>
+    
+    <select id="selectByUsername" parameterType="java.lang.String" resultMap="UserInfo">
+        select * from user where username = #{username}
+    </select>
+    
+    <select id="UserLogin" parameterType="java.lang.String" resultMap="UserInfo">
+        select * from user where username = #{username} and password = #{password}
+    </select>
+    
+    <insert id="InserUser" parameterType="java.lang.String">
+        insert into user(username,password) value(#{username},#{password})
+	</insert>
+</mapper>

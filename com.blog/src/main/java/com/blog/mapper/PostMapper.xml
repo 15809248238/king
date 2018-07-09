@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.blog.dao.PostDao" >  
+
+<!--配置一个resultMap 指定返回的类型 -->
+	<resultMap id="PostInfo" type="com.blog.entity.Post">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="posttime" property="posttime" />
+        <result column="postcontent" property="postcontent" />
+    </resultMap>
+
+	<insert id="insert" parameterType="com.blog.entity.Post"  >
+        INSERT INTO post (userid, posttime,postcontent) VALUES (#{userid}, #{posttime},#{postcontent});
+    </insert>
+
+	<select id="getpostlist" parameterType="map"  resultMap="PostInfo">
+        select * from post ORDER BY posttime DESC limit #{pagenum},#{pagesize} 
+    </select>
+</mapper>

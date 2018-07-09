@@ -1,0 +1,33 @@
+.main{
+    background-color: #F0F0F0;
+    border-radius: 20px;
+    width: 210px;
+    height: 100px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+.username{
+	width:300px;
+	height:30px;
+}
+.password{
+	width:300px;
+	height:30px;
+}
+#divlogin{
+	height:40px;
+	width:50px;
+	float:left;
+	border-radius: 20px;
+	background-color:#9AFF02;
+}
+#register{
+	margin-left:110px;
+	height:40px;
+	width:50px;
+	float:left;
+	border-radius: 20px;
+	background-color:#9AFF02;
+}

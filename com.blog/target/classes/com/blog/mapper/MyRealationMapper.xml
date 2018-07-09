@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.blog.dao.Rrealation" >  
+
+<!--配置一个resultMap 指定返回的类型 -->
+	<resultMap id="Realtion" type="com.blog.entity.Realationv1">
+        <id column="userid" property="userid" />
+        <result column="friend" property="friend" />
+        <result column="follow" property="follow" />
+        <result column="shield" property="shield" />
+    </resultMap>
+
+	<update id="Follow" parameterType="map" >
+        update relation set userid=#{userid},friend=#{friend},follow=1
+    </update>
+    
+    <select id="SelectShield" parameterType="map" resultMap="Realtion">
+        select * from relation where userid=#{userid} and friend=#{friend}
+    </select>
+
+    <update id="AbolishFollow" parameterType="map" >
+        update relation set userid=#{userid},friend=#{friend} , follow=0
+    </update>
+    
+    <select id="SelectAllFriend" parameterType="map" resultMap="Realtion">
+        select * from relation where userid=#{userid}
+    </select>
+    
+    <insert id="InsertFriend" parameterType="map" >
+    INSERT INTO relation(userid,friend,follow) VALUE(#{userid},#{friend},1);      
+    </insert>
+</mapper>
